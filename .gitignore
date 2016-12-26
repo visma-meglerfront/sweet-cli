@@ -1,0 +1,9 @@
+# GITIGNORE
+
+# OS Shit
+.DS_Store
+Thumbs.db
+
+# Temporary stuff
+example/config.*
+vendor/

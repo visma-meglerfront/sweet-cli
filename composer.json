@@ -1,0 +1,33 @@
+{
+	"name": "adepto/sweet-cli",
+	"type": "library",
+	"description": "Framework for making easy CLI applications",
+	"license": "proprietary",
+	"version": "1.0.0",
+	"require": {
+		"corneltek/getoptionkit": "^2.2",
+		"kevinlebrun/colors.php": "^1.0",
+		"symfony/yaml": "^3.2"
+	},
+	"require-dev": {
+		"squizlabs/php_codesniffer": "^2.5"
+	},
+	"autoload": {
+		"psr-4": {
+			"Adepto\\SweetCLI\\": "src"
+		}
+	},
+	"authors": [
+		{
+			"name": "Benjamin Schmidt",
+			"email": "bs@adepto.as",
+			"homepage": "https://bluefirex.de"
+		}
+	],
+	"scripts": {
+		"test": [
+			"@phpcs"
+		],
+		"phpcs": "php vendor/bin/phpcs"
+	}
+}

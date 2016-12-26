@@ -1,0 +1,45 @@
+#!/usr/bin/env php
+<?php
+	/*
+	 * THIS IS AN EXAMPLE FOR HOW TO USE SWEETCLI.
+	 * To test this make sure it is executable: chmod +x cli
+	 *
+	 * 1. Include the autoloader
+	 */
+	require __DIR__ . '/../vendor/autoload.php';
+
+	/*
+	 * 2. Load your subcommand classes
+	 */
+	require __DIR__ . '/PizzaSubCommand.php';
+
+	/*
+	 * 3. Create the CLIApplication subclass. Bonus points for using PHP7-style
+	 *    anonymous classes.
+	 */
+	$app = new class() extends Adepto\SweetCLI\Base\CLIApplication {
+
+		public static function getTitle(): string {
+			return 'Example CLI :: Example showing how to use this';
+		}
+
+		public static function getShortTitle(): string {
+			return 'Example CLI';
+		}
+
+		public static function getConfigPath(): string {
+			return __DIR__ . '/config.yml';
+		}
+	};
+
+	/*
+	 * 4. Add your subcommand classes to the CLI application.
+	 */
+	$app->addSubCommand(Adepto\SweetCLI\Example\PizzaSubCommand::class);
+
+	/*
+	 * 5. Run the app
+	 *    Note: You cannot have code after run() because it will always
+	 *    terminate the script.
+	 */
+	$app->run($argv);
