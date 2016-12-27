@@ -31,11 +31,13 @@ Your CLI application will consist of the main entry point and your subcommands. 
 
 1. Create a new file you want to use as your "binary" to be run. I recommend `cli`.
 2. Put this in the top of your file (*nothing* before it!):
+
    ```php
    #!/usr/bin/env php
    <?php
    ```
 3. Include the composer autoloader:
+
    ```php
    require 'vendor/autoload.php';
    ```
@@ -49,6 +51,7 @@ Your CLI application will consist of the main entry point and your subcommands. 
    - `public static function getCommand(): string`
    - `public static function getDescription(): string`
 7. Add your newly created subcommand classes to your application (do *not* create instances!):
+
    ```php
    $app->addSubCommand(SomeSubCommand::class);
    $app->addSubCommand(SomeOtherSubCommand::class);
@@ -75,7 +78,7 @@ So in short:
 - `+` → values allowed
 - `|` → alternative
 
-** This is a list of available modifiers:**
+**This is a list of available modifiers:**
 - `"desc" => "Some Description"` → description for the help page. Leave this empty to make the option invisible.
 - `"default" => "Some Value"` → default to "Some Value" if option is not given
 - `"validValues" => [1, 2, 3]` → only allow 1, 2 or 3 for the option
