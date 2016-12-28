@@ -15,7 +15,7 @@ Add this to `composer.json`:
 ],
 
 "require": {
-	"adeptoas/sweet-cli": "^1.0.0"
+	"adeptoas/sweet-cli": "^1.0.1"
 }
 ```
 
