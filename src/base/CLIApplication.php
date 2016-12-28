@@ -67,6 +67,12 @@
 				throw new \Exception('Cannot find subcommand class: ' . $class, 1);
 			}
 
+			$baseClassName = 'Adepto\\SweetCLI\\Subcommands\\SubCommand';
+
+			if (!is_subclass_of($class, $baseClassName)) {
+				throw new \Exception('Class "' . $class . '" does not extend "' . $baseClassName . '"');
+			}
+
 			$this->subCommandClasses[] = $class;
 			$this->subCommandClasses = array_unique($this->subCommandClasses);
 
