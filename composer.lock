@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "dbf10fe948920cd0f7e60da10aff6b82",
-    "content-hash": "24ef08657f20a0622b456912c07e0cbe",
+    "hash": "6a12fa6830a469daafaead5caa3cfa1c",
+    "content-hash": "dcff34c6fca08cac7efba5047d85c025",
     "packages": [
         {
             "name": "corneltek/getoptionkit",
@@ -245,6 +245,8 @@
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "php": ">=7.0.0"
+    },
     "platform-dev": []
 }

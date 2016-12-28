@@ -5,6 +5,7 @@
 	"license": "proprietary",
 	"version": "1.0.0",
 	"require": {
+		"php": ">=7.0.0",
 		"corneltek/getoptionkit": "^2.2",
 		"kevinlebrun/colors.php": "^1.0",
 		"symfony/yaml": "^3.2"
