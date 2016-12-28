@@ -7,6 +7,13 @@ A framework for creating awesome CLI applications using PHP.
 Add this to `composer.json`:
 
 ```json
+"repositories": [
+    {
+        "type": "vcs",
+        "url": "git@github.com:adeptoas/sweet-cli"
+    }
+],
+
 "require": {
 	"adeptoas/sweet-cli": "^1.0.0"
 }
