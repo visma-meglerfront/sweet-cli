@@ -20,9 +20,9 @@
 					"validValues"	=>	[ "italian", "american" ]
 				],
 
-				"n|number"	=>	[
+				"n|number:"	=>	[
 					"desc"			=>	"How many pizzas?",
-					"type"			=>	"number",
+					"type"			=>	"Number",
 					"default"		=>	1
 				]
 			];
