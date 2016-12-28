@@ -8,7 +8,7 @@ Add this to `composer.json`:
 
 ```json
 "require": {
-	"adeptoas/slim3-init": "^1.0.0"
+	"adeptoas/sweet-cli": "^1.0.0"
 }
 ```
 
