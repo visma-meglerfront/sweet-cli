@@ -205,7 +205,7 @@
 			}
 
 			// Handle help
-			if (count($subCommandOptions) == 0 || $arguments[0] == 'help' || $appOptions['help']) {
+			if (count($subCommandOptions) == 0 || (count($arguments) && $arguments[0] == 'help') || isset($appOptions['help'])) {
 				$printer = new SubCommandOptionPrinter();
 
 				echo $this->c(static::getTitle())->cyan . PHP_EOL;
