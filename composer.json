@@ -3,7 +3,7 @@
 	"type": "library",
 	"description": "Framework for making easy CLI applications",
 	"license": "proprietary",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"require": {
 		"php": ">=7.0.0",
 		"corneltek/getoptionkit": "^2.5",
