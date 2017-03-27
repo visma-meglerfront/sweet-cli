@@ -48,7 +48,7 @@ Your CLI application will consist of the main entry point and your subcommands. 
    ```php
    require 'vendor/autoload.php';
    ```
-4. Subclass `Adepto\SweetCLI\Base\APIApplication` and override these methods:
+4. Subclass `Adepto\SweetCLI\Base\CLIApplication` and override these methods:
    - `public static function getTitle(): string`
    - `public static function getShortTitle(): string`
    - `public static function getConfigPath(): string`
