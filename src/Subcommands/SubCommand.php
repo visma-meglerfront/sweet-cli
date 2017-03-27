@@ -196,7 +196,7 @@
 
 			foreach (static::getOptions() as $opt => $flags) {
 				$flags = (object) $flags;
-				$specOpt = $spec->add($opt, $flags->desc);
+				$specOpt = $spec->add($opt, $flags->desc ?? 'no description provided');
 
 				if (isset($flags->default)) {
 					$specOpt->defaultValue($flags->default);
