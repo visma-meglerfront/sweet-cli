@@ -49,9 +49,45 @@
 			return $this->c->__invoke(...$args);
 		}
 
+		/**
+		 * Handle an exception/error that has happened.
+		 *
+		 * @param  \Throwable $t Error or Exception
+		 */
 		public function __handleException(\Throwable $t) {
 			echo $this->c('*** ' . get_class($t) . ':')->red . PHP_EOL;
 			echo $this->c(wordwrap('    ' . $t->getMessage(), SubCommandOptionPrinter::$screenWidth, "\n    "))->red . PHP_EOL;
+			
+			echo PHP_EOL;
+
+			echo $this->c('Stacktrace:')->dark . PHP_EOL;
+			echo implode("\n", array_map([$this, 'highlightTraceLine'], explode("\n", $t->getTraceAsString()))) . PHP_EOL;
+		}
+
+		protected function highlightTraceLine(string $line) {
+			return preg_replace_callback('~^(#[0-9]+) ({main}|([\S ]+)\(([0-9]+)\): ([\S\s]+))~', function($m) {
+				$stack = $m[1];
+				$file = $line = $command = null;
+				
+				if ($m[2] == '{main}') {
+					$line = 0;
+					$file = '{main}';
+					$command = '';
+				} else {
+					$file = $m[3];
+					$line = $m[4];
+					$command = $m[5];
+				}
+				
+				return $this->c($stack)->dark . ' ' .
+					   $this->c($file)->dark .
+					   ($command ? 
+					   		PHP_EOL .
+					   		$this->c('   ' . $command) .
+					   		$this->c(' on line ' . $line)->dark .
+					   		PHP_EOL
+					   	: '');
+			}, $line);
 		}
 
 		/**
