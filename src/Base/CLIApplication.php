@@ -23,16 +23,26 @@
 	 * as well as parsing bindings. Works with {@see Adepto\SweetCLI\SubCommands\SubCommand}.
 	 *
 	 * @author  bluefirex
-	 * @version 1.0
+	 * @version 2.0
 	 * @package as.adepto.sweet-cli.base
 	 */
 	abstract class CLIApplication {
 		protected $parser;
+		protected $appPath;
 		protected $subCommandClasses;
+		protected $aliases;
 		protected $c;
 
-		public function __construct(bool $handleExceptions = true) {
+		/**
+		 * Create a CLI application.
+		 *
+		 * @param string|null  $appPath          The path to the file that is being run as the script
+		 * @param bool         $handleExceptions Whether or not to use the built-in exception handler
+		 */
+		public function __construct(string $appPath = null, bool $handleExceptions = true) {
 			$this->subCommandClasses = [];
+			$this->aliases = [];
+			$this->appPath = $appPath;
 			$this->parser = new ContinuousOptionParser($this->getAppSpecs());
 			$this->c = new Color();
 
@@ -113,6 +123,17 @@
 			$this->subCommandClasses = array_unique($this->subCommandClasses);
 
 			return $this;
+		}
+
+		/**
+		 * Add an alias or override, if it exists already
+		 *
+		 * @param string      $alias Alias, i.e. `composer`
+		 * @param string|null $path  Actual binary path, i.e. `/usr/local/bin/composer` or `composer` (if you want to rely on the user's PATH)
+		 *                           Leave null to map directly to the user's PATH.
+		 */
+		public function addAlias(string $alias, string $path = null) {
+			$this->aliases[$alias] = $path ?? $alias;
 		}
 
 		/**
@@ -240,6 +261,27 @@
 				}
 			}
 
+			// Handle aliases
+			if (array_key_exists($arguments[0] ?? '__undefined', $this->aliases)) {
+				$invoke = $arguments[0];
+
+				CLIFunctions::verboseOnLevel(1, 'Using alias: ' . $arguments[0] . ' → ' . $this->aliases[$invoke]);
+
+				// Change directory, if app path is present
+				if ($this->appPath) {
+					chdir(dirname($this->appPath));
+				}
+
+				$invoke = $this->aliases[$invoke];
+				$extraArgs = array_slice($arguments, 1, null);
+
+				// Run!
+				system($invoke . ' ' . implode(' ', $extraArgs) . ' > `tty`');
+
+				// Exit because aliases have priority
+				exit(0);
+			}
+
 			// Handle help
 			if (count($subCommandOptions) == 0 || (count($arguments) && $arguments[0] == 'help') || isset($appOptions['help'])) {
 				$printer = new SubCommandOptionPrinter();
@@ -278,7 +320,22 @@
 				echo $this->c('Available global options:') . PHP_EOL . PHP_EOL;
 				echo $printer->render($this->getAppSpecs());
 
-				echo PHP_EOL;
+				if (count($this->aliases)) {
+					echo $this->c('Available aliases:') . PHP_EOL;
+
+					$longestKeyLength = max(array_map('mb_strlen', array_keys($this->aliases)));
+
+					foreach ($this->aliases as $alias => $path) {
+						echo '    ' . $this->c->bold($alias) .
+						              str_repeat(' ', $longestKeyLength - mb_strlen($alias)) .
+						              ' → ' .
+						              $path .
+						              PHP_EOL;
+					}
+
+					echo PHP_EOL;
+				}
+
 				echo $this->c('Legend: ') . PHP_EOL;
 				echo '    ' . $this->c->bold('*') . '    ' . $this->c(' → required') . PHP_EOL;
 				echo '    ' . $this->c->dark('[= …]') . $this->c(' → default value') . PHP_EOL;

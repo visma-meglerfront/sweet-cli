@@ -50,15 +50,29 @@ Your CLI application will consist of the main entry point and your subcommands. 
    - `public static function getOptions(): array` (refer to the options syntax for this)
    - `public static function getCommand(): string`
    - `public static function getDescription(): string`
-7. Add your newly created subcommand classes to your application (do *not* create instances!):
+7. Instantiate your application (where `Application` is the name of your class. If you used PHP anonymous classes you don't need this step.):
+
+   ```php
+   $app = new Application(__FILE__);
+   ```
+8. Add your newly created subcommand classes to your application (do *not* create instances!):
 
    ```php
    $app->addSubCommand(SomeSubCommand::class);
    $app->addSubCommand(SomeOtherSubCommand::class);
    ```
-8. Call `$app->run($argv)`.
-9. Make your script executable: `chmod +x cli`
-10. You can now run it: `./cli --help`
+9. (Optional) Add aliases:
+   
+   ```php
+   $app->addAlias('npm');
+   $app->addAlias('php', '/usr/local/bin/php');
+   ```
+
+   Aliases are special subcommands that collect all passed arguments and call another application with those options, i.e. `cli composer -v` -> `composer -v`. The command will be run from the application's working directory, if a path was passed to the application's constructor.
+
+10. Call `$app->run($argv)`.
+11. Make your script executable: `chmod +x cli`
+12. You can now run it: `./cli --help`
 
 ## Options Syntax
 
