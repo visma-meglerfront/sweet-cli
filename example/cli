@@ -17,7 +17,7 @@
 	 * 3. Create the CLIApplication subclass. Bonus points for using PHP7-style
 	 *    anonymous classes.
 	 */
-	$app = new class() extends Adepto\SweetCLI\Base\CLIApplication {
+	$app = new class(__FILE__) extends Adepto\SweetCLI\Base\CLIApplication {
 
 		public static function getTitle(): string {
 			return 'Example CLI :: Example showing how to use this';
