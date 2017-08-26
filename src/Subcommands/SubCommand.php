@@ -87,7 +87,7 @@
 		 * @return boolean
 		 */
 		public function hasOption(string $option) {
-			return isset($this->options->$option);
+			return property_exists($this->options, $option);
 		}
 
 		/**
