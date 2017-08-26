@@ -16,6 +16,7 @@
 	};
 
 	use Adepto\SweetCLI\Subcommands\SubCommandOptionPrinter;
+	use Adepto\SweetCLI\Exceptions\ConflictException;
 
 	/**
 	 * CLIApplication
@@ -68,10 +69,12 @@
 			echo $this->c('*** ' . get_class($t) . ':')->red . PHP_EOL;
 			echo $this->c(wordwrap('    ' . $t->getMessage(), SubCommandOptionPrinter::$screenWidth, "\n    "))->red . PHP_EOL;
 			
-			echo PHP_EOL;
+			if (!$t instanceof ConflictException) {
+				echo PHP_EOL;
 
-			echo $this->c('Stacktrace:')->dark . PHP_EOL;
-			echo implode("\n", array_map([$this, 'highlightTraceLine'], explode("\n", $t->getTraceAsString()))) . PHP_EOL;
+				echo $this->c('Stacktrace:')->dark . PHP_EOL;
+				echo implode("\n", array_map([$this, 'highlightTraceLine'], explode("\n", $t->getTraceAsString()))) . PHP_EOL;
+			}
 		}
 
 		protected function highlightTraceLine(string $line) {
