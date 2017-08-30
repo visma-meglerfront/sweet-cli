@@ -13,7 +13,6 @@
 	 */
 	class ColoredLogger {
 		protected $c;
-		protected $spinnerRunning = false;
 
 		public function __construct() {
 			$this->c = new Color();
