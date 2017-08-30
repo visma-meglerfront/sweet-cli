@@ -13,6 +13,7 @@
 	 */
 	class ColoredLogger {
 		protected $c;
+		protected $spinnerRunning = false;
 
 		public function __construct() {
 			$this->c = new Color();
@@ -133,7 +134,7 @@
 		 *
 		 * @param  bool|boolean $reset  Pass true to hide id, false to show/update it
 		 * @param  string|null  $label  Label to show beside the spinner icon
-		 * @param  int|integer  $indent How many levels to indent, defaults to 1
+		 * @param  int|integer  $indent Indenting Level, default = 1
 		 */
 		protected function printSpinner(bool $reset = false, string $label = null, int $indent = 1) {
 			static $spinner = '⠏⠇⠧⠦⠴⠼⠸⠹⠙⠋';
@@ -147,6 +148,85 @@
 			}
 
 			echo "\r" . str_repeat(' ', $indent * 4) . mb_substr($spinner, $iteration++ % 10, 1) . ' ' . $label . ' ';
+		}
+
+		/**
+		 * Show a progress bar.
+		 * Takes terminal width into account.
+		 *
+		 * @param  int         $done       Progress as an int, pass 0 to reset it
+		 * @param  int|integer $total      Maximum progress possible
+		 * @param  string|null $doneLabel  Label to show for how many items/whatever are done, i.e. %d MB
+		 * @param  string|null $totalLabel Label to show for how many items/whatever can be done, i.e. %d GB
+		 * @param  int|integer $indent     Indenting Level, default = 1
+		 */
+		protected function printProgressBar(int $done, int $total = 100, string $doneLabel = null, string $totalLabel = null, int $indent = 1) {
+			static $startTime;
+
+			// if we go over our bound, just ignore it
+			if ($done > $total) return;
+
+			if (empty($startTime) || $done == 0) {
+				$startTime = time();
+			}
+
+			$now = time();
+			$barSize = 16;
+
+			// Calculate Display
+			$perc = (double) ($done / $total);
+			$disp = number_format($perc * 100, 0);
+
+			// Calculate ETA
+			$rate = ($now - $startTime) / ($done > 0 ? $done : 1);
+			$left = $total - $done;
+			$eta = round($rate * $left, 2);
+
+			$elapsed = $now - $startTime;
+
+			// Build Labels
+			if ($doneLabel === null) {
+				$doneLabel = $done;
+			}
+
+			if ($totalLabel === null) {
+				$totalLabel = $total;
+			}
+
+			$prependix = "\r" . str_repeat(' ', $indent * 4) . "[";
+			$appendix = "] $disp%  $doneLabel/$totalLabel";
+			$rateLabel = ' ~' . number_format($eta) . ' sec remaining · elapsed ' . number_format($elapsed) . ' sec';;
+
+			// Build the status bar itself
+			$barSize = $this->getColumns()   // terminal width
+			         - mb_strlen($prependix) // prependix label length
+			         - mb_strlen($appendix)  // appendix label length
+			         - mb_strlen($rateLabel) // rate label length
+			         - 3;                    // spaces between the labels
+
+			$barLabelSize = floor($perc * $barSize);
+
+			$statusBar = $prependix;
+			$statusBar .= str_repeat('=', $barLabelSize);
+			
+			if ($barLabelSize < $barSize) {
+				$statusBar .= '>';
+				$statusBar .= str_repeat(' ', $barSize - $barLabelSize);
+			} else {
+				$statusBar .= '=';
+			}
+
+			$statusBar .= $appendix;
+			$statusBar .= $rateLabel;
+
+			// Show dem status bar
+			echo $statusBar . ' ';
+			flush();
+
+			// when done, send a newline
+			if ($done == $total) {
+				echo "\n";
+			}
 		}
 
 		/**
@@ -192,6 +272,15 @@
 		protected function println(...$args) {
 			$this->print(...$args);
 			echo PHP_EOL;
+		}
+
+		/**
+		 * Get the terminal column width
+		 *
+		 * @return int
+		 */
+		protected function getColumns(): int {
+			return (int) exec('tput cols') ?: 80;
 		}
 
 		/**
