@@ -119,6 +119,37 @@
 		}
 
 		/**
+		 * Print a spinner.
+		 * Note that in order for it spin you have to call it multiple times.
+		 * If you want to hide it, call it with $reset = true.
+		 *
+		 * Example:
+		 * 
+		 *     while (doSomethingHeav()) {
+		 *         printSpinner()
+		 *     }
+		 *
+		 * printSpinner(false)
+		 *
+		 * @param  bool|boolean $reset  Pass true to hide id, false to show/update it
+		 * @param  string|null  $label  Label to show beside the spinner icon
+		 * @param  int|integer  $indent How many levels to indent, defaults to 1
+		 */
+		protected function printSpinner(bool $reset = false, string $label = null, int $indent = 1) {
+			static $spinner = '⠏⠇⠧⠦⠴⠼⠸⠹⠙⠋';
+			static $iteration = 0;
+
+			if ($reset) {
+				$iteration = 0;
+				echo "\r" . str_repeat(' ', mb_strlen($label) + $indent * 4 + 1 + 1) . "\r";
+
+				return;
+			}
+
+			echo "\r" . str_repeat(' ', $indent * 4) . mb_substr($spinner, $iteration++ % 10, 1) . ' ' . $label . ' ';
+		}
+
+		/**
 		 * Print a divider.
 		 *
 		 * @param bool|boolean $pad  Whether or not to print empty lines before and after the divider
