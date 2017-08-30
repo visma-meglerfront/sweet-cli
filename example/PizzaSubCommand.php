@@ -6,6 +6,27 @@
 		public function run() {
 			$this->printHeadingLine('Your pizza has:');
 			$this->println(json_encode($this->options, JSON_PRETTY_PRINT));
+
+			$this->printSubHeadingLine('Baking…');
+
+			// Show off spinner
+			for ($i = 0; $i < 100; $i++) {
+				$this->printSpinner(false, 'Preparing…');
+				usleep(50000);
+			}
+
+			$this->printSpinner(true);
+
+			// Show off progress bar
+			$total = 16;
+
+			for ($i = 0; $i < $total; $i++) {
+				$this->printProgressBar($i + 1, $total, sprintf('%d', $i + 1), sprintf('%d seconds', $total));
+				
+				if ($i != $total) sleep(1);
+			}
+
+			echo $this->printSuccessLine('Done');
 		}
 
 		public static function getOptions(): array {
