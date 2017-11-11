@@ -4,34 +4,30 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "dfa4292fbb43bdfae3c0d88e795b13b8",
-    "content-hash": "27b503f66f34706e8b4808f2384fc790",
+    "hash": "184e422a9943b130c9918e3023893d0b",
+    "content-hash": "b3bb334e1fe9a7f3666ba95c3ef2ded3",
     "packages": [
         {
             "name": "corneltek/getoptionkit",
-            "version": "2.5.0",
+            "version": "2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/c9s/GetOptionKit.git",
-                "reference": "076cc41051d6417bf9304fe92f8d9793edac9910"
+                "reference": "995607ddf4fc90ebdb4a7d58fe972d581ad8495f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/c9s/GetOptionKit/zipball/076cc41051d6417bf9304fe92f8d9793edac9910",
-                "reference": "076cc41051d6417bf9304fe92f8d9793edac9910",
+                "url": "https://api.github.com/repos/c9s/GetOptionKit/zipball/995607ddf4fc90ebdb4a7d58fe972d581ad8495f",
+                "reference": "995607ddf4fc90ebdb4a7d58fe972d581ad8495f",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
-            "require-dev": {
-                "corneltek/phpunit-testmore": "dev-master",
-                "satooshi/php-coveralls": "^1"
-            },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.5.x-dev"
+                    "dev-master": "2.6.x-dev"
                 }
             },
             "autoload": {
@@ -46,12 +42,12 @@
             "authors": [
                 {
                     "name": "Yo-An Lin",
-                    "email": "cornelius.howl@gmail.com"
+                    "email": "yoanlin93@gmail.com"
                 }
             ],
             "description": "Powerful command-line option toolkit",
             "homepage": "http://github.com/c9s/GetOptionKit",
-            "time": "2016-07-18 07:44:29"
+            "time": "2017-06-30 14:54:48"
         },
         {
             "name": "kevinlebrun/colors.php",
@@ -106,20 +102,20 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.2.1",
+            "version": "v3.3.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "a7095af4b97a0955f85c8989106c249fa649011f"
+                "reference": "0938408c4faa518d95230deabb5f595bf0de31b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/a7095af4b97a0955f85c8989106c249fa649011f",
-                "reference": "a7095af4b97a0955f85c8989106c249fa649011f",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/0938408c4faa518d95230deabb5f595bf0de31b9",
+                "reference": "0938408c4faa518d95230deabb5f595bf0de31b9",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5.9"
+                "php": "^5.5.9|>=7.0.8"
             },
             "require-dev": {
                 "symfony/console": "~2.8|~3.0"
@@ -130,7 +126,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.2-dev"
+                    "dev-master": "3.3-dev"
                 }
             },
             "autoload": {
@@ -157,22 +153,22 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2016-12-10 10:07:06"
+            "time": "2017-11-10 18:26:04"
         }
     ],
     "packages-dev": [
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "2.7.1",
+            "version": "2.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "9b324f3a1132459a7274a0ace2e1b766ba80930f"
+                "reference": "dcbed1074f8244661eecddfc2a675430d8d33f62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/9b324f3a1132459a7274a0ace2e1b766ba80930f",
-                "reference": "9b324f3a1132459a7274a0ace2e1b766ba80930f",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/dcbed1074f8244661eecddfc2a675430d8d33f62",
+                "reference": "dcbed1074f8244661eecddfc2a675430d8d33f62",
                 "shasum": ""
             },
             "require": {
@@ -237,7 +233,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2016-11-30 04:02:31"
+            "time": "2017-05-22 02:43:20"
         }
     ],
     "aliases": [],
