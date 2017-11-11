@@ -144,4 +144,12 @@ Set the value of an option. Use this with caution!
 requireOption(string $option, string $message)
 ```
 
+Require an option to be set and terminate with `$message` if missing.
+
+```php
+getApp(): CLIApplication
+```
+
+Get the application the subcommand has been called from. If you have multiple applications using the same subcommand this can be handy to determine what to do based on the application.
+
 Check if `$option` is set and throw an exception containing `$message` if it isn't set.

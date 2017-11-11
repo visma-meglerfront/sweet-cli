@@ -8,7 +8,8 @@
 
 	use Adepto\SweetCLI\Base\{
 		Config,
-		ColoredLogger
+		ColoredLogger,
+		CLIApplication
 	};
 
 	use Adepto\SweetCLI\Exceptions\{
@@ -26,12 +27,14 @@
 	abstract class SubCommand extends ColoredLogger {
 		const COMMAND = '';
 
+		protected $app;
 		protected $options;
 		protected $arguments;
 
-		public function __construct(\stdClass $options, array $arguments = []) {
+		public function __construct(CLIApplication $app, \stdClass $options, array $arguments = []) {
 			parent::__construct();
 
+			$this->app = $app;
 			$this->options = $options;
 			$this->arguments = $arguments;
 		}
@@ -124,6 +127,15 @@
 			if (!$this->hasOption($option)) {
 				throw new RequireValueException($message);
 			}
+		}
+
+		/**
+		 * Get the app this subcommand has been called from
+		 *
+		 * @return CLIApplication
+		 */
+		public function getApp(): CLIApplication {
+			return $this->app;
 		}
 
 		/**

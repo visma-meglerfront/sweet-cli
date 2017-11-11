@@ -389,7 +389,7 @@
 					Else continue.
 				 */
 				try {
-					$subCmdObj = new $class((object) $optionsArray, $arguments);
+					$subCmdObj = new $class($this, (object) $optionsArray, $arguments);
 					$subCmdObj->onBeforeRun();
 					$subCmdObj->run();
 
