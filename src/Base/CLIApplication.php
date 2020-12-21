@@ -2,6 +2,7 @@
 	namespace Adepto\SweetCLI\Base;
 
 	// GetOptionKit
+	use Adepto\SweetCLI\Subcommands\SubCommand;
 	use GetOptionKit\OptionCollection;
 	use GetOptionKit\ContinuousOptionParser;
 	use GetOptionKit\Exception\InvalidOptionException;
@@ -17,7 +18,7 @@
 
 	use Adepto\SweetCLI\Subcommands\SubCommandOptionPrinter;
 	use Adepto\SweetCLI\Exceptions\ConflictException;
-
+	
 	/**
 	 * CLIApplication
 	 * An application running in CLI. Provides all of the logic
@@ -26,6 +27,9 @@
 	 * @author  bluefirex
 	 * @version 2.0
 	 * @package as.adepto.sweet-cli.base
+	 *
+	 * @method static getTitle()
+	 * @method static getShortTitle()
 	 */
 	abstract class CLIApplication {
 		protected $parser;
@@ -63,7 +67,7 @@
 		/**
 		 * Handle an exception/error that has happened.
 		 *
-		 * @param  \Throwable $t Error or Exception
+		 * @param \Throwable $t Error or Exception
 		 */
 		public function __handleException(\Throwable $t) {
 			echo $this->c('*** ' . get_class($t) . ':')->red . PHP_EOL;
@@ -102,14 +106,16 @@
 					   	: '');
 			}, $line);
 		}
-
+		
 		/**
 		 * Add a subcommand class name.
 		 * You are responsible for loading it yourself!
 		 *
-		 * @param string          $class Class Name, including any namespaces
+		 * @param string $class Class Name, including any namespaces
 		 *
 		 * @return CLIApplication        Convenience for chaining
+		 *
+		 * @throws \Exception If $class does not extend SubCommand
 		 */
 		public function addSubCommand(string $class): CLIApplication {
 			if (!class_exists($class)) {
@@ -183,13 +189,15 @@
 
 			return $appSpecs;
 		}
-
+		
 		/**
 		 * Parse global app options out of an argv array
 		 *
-		 * @param array  $argv argv as array
+		 * @param array $argv argv as array
 		 *
-		 * @return stdClass
+		 * @return \GetOptionKit\Option[]|\GetOptionKit\OptionResult
+		 *
+		 * @throws \Exception If parsing failed
 		 */
 		protected function parseAppOptions(array $argv) {
 			return $this->parser->parse($argv);
@@ -205,12 +213,14 @@
 			Config::set('_cli.title.long', static::getTitle());
 			Config::set('_cli.title.short', static::getShortTitle());
 		}
-
+		
 		/**
 		 * Run the application with the given $argv.
 		 * This function will always exit the script with an appropriate status code.
 		 *
-		 * @param array  $argv arguments as array
+		 * @param array $argv arguments as array
+		 *
+		 * @throws \Exception If parsing failed
 		 */
 		public function run(array $argv) {
 			if (php_sapi_name() !== 'cli') {
@@ -232,7 +242,7 @@
 
 			try {
 				$appOptions = $this->parseAppOptions($argv);
-			} catch (InvalidOptionException $e) {
+			} catch (\Exception $e) {
 				echo $this->c($e->getMessage())->red . PHP_EOL;
 
 				exit(1);
@@ -354,9 +364,11 @@
 				foreach ($options as $option) {
 					$optionsArray[$option->getId()] = $option->getValue();
 				}
-
-				/*
-					This is the class the subcommand is based on.
+				
+				/**
+				 * This is the class the subcommand is based on.
+				 *
+				 * @var SubCommand $class
 				 */
 				$class = $subCommands[$subCommand]['class'];
 
@@ -389,12 +401,17 @@
 					Else continue.
 				 */
 				try {
+					/**
+					 * Actual subcommand object.
+					 *
+					 * @var SubCommand $subCmdObj
+					 */
 					$subCmdObj = new $class($this, (object) $optionsArray, $arguments);
 					$subCmdObj->onBeforeRun();
 					$subCmdObj->run();
 
 					exit(0);
-				} catch (Exception $e) {
+				} catch (\Exception $e) {
 					echo $this->c($subCommand . ': ' . $e->getMessage())->red . PHP_EOL;
 					exit(1);
 				}
