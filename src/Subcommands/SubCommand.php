@@ -70,7 +70,7 @@
 		 * @return boolean
 		 */
 		protected function hasDuplicateBoolean(bool $bool, array $values) {
-			return array_count_values(array_map('strval', $values))[strval($bool)] ?? 0 > 1;
+			return (array_count_values(array_map('strval', $values))[strval($bool)] ?? 0) > 1;
 		}
 
 		/**
