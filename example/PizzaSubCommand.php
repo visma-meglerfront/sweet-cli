@@ -6,7 +6,15 @@
 		public function run() {
 			$this->printHeadingLine('Your pizza has:');
 			$this->println(json_encode($this->options, JSON_PRETTY_PRINT));
+			
+			$this->println();
+			$result = $this->printTimeoutMessage('Pizza ready for baking.', 1, 3, 'c');
 
+			if (!$result) {
+				$this->printInfoLine('Baking cancelled.');
+				return;
+			}
+			
 			$this->printSubHeadingLine('Baking…');
 
 			// Show off spinner

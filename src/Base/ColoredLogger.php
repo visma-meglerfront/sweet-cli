@@ -253,8 +253,6 @@
 		 * @param int|integer $indent  Indenting Level, default = 1
 		 * @param string      $color   Color of the message, default = 'dark' | Uses the colors of kevinlebrun\Colors
 		 * @param string      $char    Char to be used as the list character. If empty, '·' is used.
-		 *
-		 * @return [type]               [description]
 		 */
 		protected function printListItem($message, int $indent = 1, string $color = 'dark', string $char = '·') {
 			if (empty($char)) {
@@ -262,6 +260,34 @@
 			}
 
 			$this->println($this->c(str_repeat(' ', $indent * 4 - 2) . $char . ' ' . $message)->$color, 0);
+		}
+		
+		protected function printTimeoutMessage($message, int $indent = 1, int $timeout = 3, string $key = 'c') {
+			if (php_sapi_name() == 'cli') {
+				$this->println($this->c('🕯️  ' . $message)->magenta, $indent);
+				$this->println($this->c('   Continuing in ' . $timeout . ' seconds. Press "' . $key . '" to cancel.')->dark);
+				$this->println();
+				
+				$stdIn = fopen('php://stdin', 'r');
+				$read = [$stdIn];
+				$write = $except = [];
+				
+				if (stream_select($read, $write, $except, $timeout) !== false) {
+					$this->println();
+					$keyPressed = fgets($stdIn, 1);
+					
+					echo "\rbastard\rhi";
+					echo "\r" . str_repeat(' ', mb_strlen($keyPressed) + 1) . "\r";
+					
+					var_dump($keyPressed);
+					
+					if (strtolower($keyPressed) == $key) {
+						return false;
+					}
+				}
+			}
+			
+			return true;
 		}
 
 		/**
