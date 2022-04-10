@@ -44,7 +44,6 @@ Your CLI application will consist of the main entry point and your subcommands. 
 4. Subclass `Adepto\SweetCLI\Base\CLIApplication` and override these methods:
    - `public static function getTitle(): string`
    - `public static function getShortTitle(): string`
-   - `public static function getConfigPath(): string`
 5. Subclass `Adepto\SweetCLI\Subcommands\SubCommand` for every subcommand you need and override these methods:
    - `public static function getOptions(): array` (refer to the options syntax for this)
    - `public static function getCommand(): string`

@@ -26,10 +26,6 @@
 		public static function getShortTitle(): string {
 			return 'Example CLI';
 		}
-
-		public static function getConfigPath(): string {
-			return __DIR__ . '/config.yml';
-		}
 	};
 
 	$app->addAlias('npm');
