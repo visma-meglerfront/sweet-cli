@@ -17,7 +17,7 @@
 			if ($opt->getId() == 'help') return null;
 
 			$c = new Color();
-			$c->setTheme([
+			$c->setUserStyles([
 				'option'	=>	[]
 			]);
 
@@ -33,7 +33,7 @@
 			}
 
 			if ($opt->isRequired()) {
-				$c->setTheme([
+				$c->setUserStyles([
 					'option'	=>	['bold']
 				]);
 
