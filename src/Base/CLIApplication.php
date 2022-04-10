@@ -3,20 +3,22 @@
 
 	// GetOptionKit
 	use Adepto\SweetCLI\Subcommands\SubCommand;
+	use Exception;
 	use GetOptionKit\OptionCollection;
 	use GetOptionKit\ContinuousOptionParser;
-	use GetOptionKit\Exception\InvalidOptionException;
 
 	// Colors
 	use Colors\Color;
 
 	use Adepto\SweetCLI\Subcommands\SubCommandOptionPrinter;
 	use Adepto\SweetCLI\Exceptions\ConflictException;
+	use GetOptionKit\OptionResult;
+	use Throwable;
 	
 	/**
 	 * CLIApplication
-	 * An application running in CLI. Provides all of the logic
-	 * as well as parsing bindings. Works with {@see Adepto\SweetCLI\SubCommands\SubCommand}.
+	 * An application running in CLI. Provides all the logic
+	 * as well as parsing bindings. Works with {@see \Adepto\SweetCLI\Subcommands\SubCommand}.
 	 *
 	 * @author  bluefirex
 	 * @version 2.0
@@ -26,19 +28,19 @@
 	 * @method static getShortTitle()
 	 */
 	abstract class CLIApplication {
-		protected $parser;
-		protected $appPath;
-		protected $subCommandClasses;
-		protected $aliases;
-		protected $c;
+		protected ContinuousOptionParser $parser;
+		protected ?string $appPath;
+		protected array $subCommandClasses;
+		protected array $aliases;
+		protected Color $c;
 
 		/**
 		 * Create a CLI application.
 		 *
 		 * @param string|null  $appPath          The path to the file that is being run as the script
-		 * @param bool         $handleExceptions Whether or not to use the built-in exception handler
+		 * @param bool         $handleExceptions Whether to use the built-in exception handler
 		 */
-		public function __construct(string $appPath = null, bool $handleExceptions = true) {
+		public function __construct(?string $appPath = null, bool $handleExceptions = true) {
 			$this->subCommandClasses = [];
 			$this->aliases = [];
 			$this->appPath = $appPath;
@@ -49,9 +51,6 @@
 			if ($handleExceptions) {
 				set_exception_handler([$this, '__handleException']);
 			}
-
-			// Load Config
-			Config::loadFile(static::getConfigPath());
 		}
 
 		protected function c(...$args) {
@@ -61,9 +60,9 @@
 		/**
 		 * Handle an exception/error that has happened.
 		 *
-		 * @param \Throwable $t Error or Exception
+		 * @param Throwable $t Error or Exception
 		 */
-		public function __handleException(\Throwable $t) {
+		public function __handleException(Throwable $t): void {
 			echo $this->c('*** ' . get_class($t) . ':')->red . PHP_EOL;
 			echo $this->c(wordwrap('    ' . $t->getMessage(), SubCommandOptionPrinter::$screenWidth, "\n    "))->red . PHP_EOL;
 			
@@ -75,10 +74,9 @@
 			}
 		}
 
-		protected function highlightTraceLine(string $line) {
+		protected function highlightTraceLine(string $line): string {
 			return preg_replace_callback('~^(#[0-9]+) ({main}|([\S ]+)\(([0-9]+)\): ([\S\s]+))~', function($m) {
 				$stack = $m[1];
-				$file = $line = $command = null;
 				
 				if ($m[2] == '{main}') {
 					$line = 0;
@@ -109,17 +107,17 @@
 		 *
 		 * @return CLIApplication        Convenience for chaining
 		 *
-		 * @throws \Exception If $class does not extend SubCommand
+		 * @throws Exception If $class does not extend SubCommand
 		 */
 		public function addSubCommand(string $class): CLIApplication {
 			if (!class_exists($class)) {
-				throw new \Exception('Cannot find subcommand class: ' . $class, 1);
+				throw new Exception('Cannot find subcommand class: ' . $class, 1);
 			}
 
 			$baseClassName = 'Adepto\\SweetCLI\\Subcommands\\SubCommand';
 
 			if (!is_subclass_of($class, $baseClassName)) {
-				throw new \Exception('Class "' . $class . '" does not extend "' . $baseClassName . '"');
+				throw new Exception('Class "' . $class . '" does not extend "' . $baseClassName . '"');
 			}
 
 			$this->subCommandClasses[] = $class;
@@ -164,6 +162,7 @@
 			ksort($subCommands);
 
 			foreach ($subCommands as $command => $config) {
+				/** @noinspection PhpArrayAccessCanBeReplacedWithForeachValueInspection */
 				$spec = &$subCommands[$command]['options'];
 				$spec = $config['class']::getOptionKitSpecs();
 			}
@@ -189,23 +188,19 @@
 		 *
 		 * @param array $argv argv as array
 		 *
-		 * @return \GetOptionKit\Option[]|\GetOptionKit\OptionResult
+		 * @return OptionResult
 		 *
-		 * @throws \Exception If parsing failed
+		 * @throws Exception If parsing failed
 		 */
-		protected function parseAppOptions(array $argv) {
+		protected function parseAppOptions(array $argv): OptionResult {
 			return $this->parser->parse($argv);
 		}
 
 		/**
 		 * Set up the application before running it.
-		 * Use this to set config values beforehand.
 		 */
-		public function setup() {
-			Config::unset('_cli.title');
-
-			Config::set('_cli.title.long', static::getTitle());
-			Config::set('_cli.title.short', static::getShortTitle());
+		public function setup(): void {
+			// Nothing by default
 		}
 		
 		/**
@@ -214,18 +209,15 @@
 		 *
 		 * @param array $argv arguments as array
 		 *
-		 * @throws \Exception If parsing failed
+		 * @throws Exception If parsing failed
 		 */
 		public function run(array $argv) {
 			if (php_sapi_name() !== 'cli') {
-				throw new \Exception('Unsupported operation.');
+				throw new Exception('Unsupported operation.');
 			}
 
 			// Set up first
 			$this->setup();
-
-			// Colorizing
-			$c = new Color();
 
 			// Load subcommand definitions
 			$subCommands = $this->getSubCommandSpecs();
@@ -236,7 +228,7 @@
 
 			try {
 				$appOptions = $this->parseAppOptions($argv);
-			} catch (\Exception $e) {
+			} catch (Exception $e) {
 				echo $this->c($e->getMessage())->red . PHP_EOL;
 
 				exit(1);
@@ -259,7 +251,7 @@
 					try {
 						$this->parser->setSpecs($subCommands[$currentArg]['options']);
 						$subCommandOptions[$currentArg] = $this->parser->continueParse();
-					} catch (\Exception $e) {
+					} catch (Exception $e) {
 						echo $this->c($currentArg . ': ' . $e->getMessage())->red . PHP_EOL;
 						exit;
 					}
@@ -362,7 +354,7 @@
 				/**
 				 * This is the class the subcommand is based on.
 				 *
-				 * @var SubCommand $class
+				 * @var class-string<SubCommand> $class
 				 */
 				$class = $subCommands[$subCommand]['class'];
 

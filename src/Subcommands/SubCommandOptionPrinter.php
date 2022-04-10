@@ -8,12 +8,12 @@
 	use Colors\Color;
 
 	class SubCommandOptionPrinter implements OptionPrinter {
-		public static $screenWidth = 78;
+		public static int $screenWidth = 78;
 
 		/**
 		 * Render readable spec
 		 */
-		public function renderOption(Option $opt) {
+		public function renderOption(Option $opt): ?string {
 			if ($opt->getId() == 'help') return null;
 
 			$c = new Color();
@@ -58,7 +58,7 @@
 		 *
 		 * @return string output
 		 */
-		public function render(OptionCollection $options) {
+		public function render(OptionCollection $options): string {
 			$c = new Color();
 
 			$lines = [];

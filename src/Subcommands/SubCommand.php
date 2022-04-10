@@ -14,7 +14,10 @@
 	use Adepto\SweetCLI\Exceptions\{
 		ConflictException
 	};
-
+	
+	use GetOptionKit\OptionPrinter\OptionPrinter;
+	use stdClass;
+	
 	/**
 	 * SubCommand
 	 * A subcommand in the command line interface.
@@ -26,11 +29,11 @@
 	abstract class SubCommand extends ColoredLogger {
 		const COMMAND = '';
 
-		protected $app;
-		protected $options;
-		protected $arguments;
+		protected CLIApplication $app;
+		protected stdClass $options;
+		protected array $arguments;
 
-		public function __construct(CLIApplication $app, \stdClass $options, array $arguments = []) {
+		public function __construct(CLIApplication $app, stdClass $options, array $arguments = []) {
 			parent::__construct();
 
 			$this->app = $app;
@@ -66,19 +69,19 @@
 		 * @param boolean $bool   Bool to check
 		 * @param array   $values Array to search in
 		 *
-		 * @return boolean
+		 * @return bool
 		 */
-		protected function hasDuplicateBoolean(bool $bool, array $values) {
+		protected function hasDuplicateBoolean(bool $bool, array $values): bool {
 			return (array_count_values(array_map('strval', $values))[strval($bool)] ?? 0) > 1;
 		}
 
 		/**
 		 * Does this subcommand have options?
 		 *
-		 * @return boolean
+		 * @return bool
 		 */
 		public function hasOptions(): bool {
-			return count($this->options) > 0;
+			return count((array) $this->options) > 0;
 		}
 
 		/**
@@ -86,9 +89,9 @@
 		 *
 		 * @param string  $option Option
 		 *
-		 * @return boolean
+		 * @return bool
 		 */
-		public function hasOption(string $option) {
+		public function hasOption(string $option): bool {
 			return property_exists($this->options, $option);
 		}
 
@@ -100,7 +103,7 @@
 		 *
 		 * @return mixed
 		 */
-		public function getOption($option) {
+		public function getOption(string $option) {
 			return $this->options->$option ?? null;
 		}
 
@@ -110,19 +113,21 @@
 		 * @param string $option Option
 		 * @param mixed  $value  Value
 		 */
-		public function setOption(string $option, $value) {
+		public function setOption(string $option, $value): SubCommand {
 			$this->options->$option = $value;
 
 			return $this;
 		}
-
+		
 		/**
 		 * Require an option to be set.
 		 *
 		 * @param string $option  Option to be required
 		 * @param string $message Exception message if $option isn't set
+		 *
+		 * @throws RequireValueException
 		 */
-		protected function requireOption(string $option, $message) {
+		protected function requireOption(string $option, string $message) {
 			if (!$this->hasOption($option)) {
 				throw new RequireValueException($message);
 			}
@@ -136,9 +141,11 @@
 		public function getApp(): CLIApplication {
 			return $this->app;
 		}
-
+		
 		/**
 		 * Callback to be run before the main function runs.
+		 *
+		 * @throws ConflictException
 		 */
 		public function onBeforeRun() {
 			$this->checkConflictingOptions();

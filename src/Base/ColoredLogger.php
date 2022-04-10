@@ -12,7 +12,7 @@
 	 * @package as.adepto.sweet-cli.base
 	 */
 	class ColoredLogger {
-		protected $c;
+		protected Color $c;
 
 		public function __construct() {
 			$this->c = new Color();
@@ -23,9 +23,9 @@
 		 *
 		 * @param string $str Message to print
 		 *
-		 * @return Color       Instance of {@link Colors\Color}
+		 * @return Color       Instance of {@link \Colors\Color}
 		 */
-		protected function c($str) {
+		protected function c(string $str) {
 			return $this->c->__invoke($str);
 		}
 
@@ -38,44 +38,44 @@
 		/**
 		 * Print an error line including a cross emoji.
 		 *
-		 * @param string  $message Message to print
-		 * @param integer $indent  Indenting Level, default = 1
-		 * @param string  $emoji   A custom emoji to use or empty, to use none
+		 * @param string    $message Message to print
+		 * @param int       $indent  Indenting Level, default = 1
+		 * @param string    $emoji   A custom emoji to use or empty, to use none
 		 */
-		protected function printErrorLine($message, $indent = 1, $emoji = '❌') {
+		protected function printErrorLine(string $message, int $indent = 1, string $emoji = '❌') {
 			$this->println($this->c((!empty($emoji) ? $emoji . '  ' : '') . $message)->red, $indent);
 		}
 
 		/**
 		 * Print a success line including a checkmark emoji.
 		 *
-		 * @param string  $message Message to print
-		 * @param integer $indent  Indenting Level, default = 1
-		 * @param string  $emoji   A custom emoji to use or empty, to use none
+		 * @param string    $message Message to print
+		 * @param int       $indent  Indenting Level, default = 1
+		 * @param string    $emoji   A custom emoji to use or empty, to use none
 		 */
-		protected function printSuccessLine($message, $indent = 1, $emoji = '✅') {
+		protected function printSuccessLine(string $message, int $indent = 1, string $emoji = '✅') {
 			$this->println($this->c((!empty($emoji) ? $emoji . '  ' : '') . $message)->green, $indent);
 		}
 
 		/**
 		 * Print an info line including an info emoji.
 		 *
-		 * @param string  $message Message to print
-		 * @param integer $indent  Indenting Level, default = 1
-		 * @param string  $color   Color of the message, default = 'dark' | Uses the colors of kevinlebrun/Colors
-		 * @param string  $emoji   A custom emoji to use or empty, to use none
+		 * @param string    $message Message to print
+		 * @param int       $indent  Indenting Level, default = 1
+		 * @param string    $color   Color of the message, default = 'dark' | Uses the colors of kevinlebrun/Colors
+		 * @param string    $emoji   A custom emoji to use or empty, to use none
 		 */
-		protected function printInfoLine($message, $indent = 1, $color = 'dark', $emoji = '❕') {
+		protected function printInfoLine(string $message, int $indent = 1, string $color = 'dark', string $emoji = '❕') {
 			$this->println($this->c((!empty($emoji) ? $emoji . '  ' : '') . $message)->$color, $indent);
 		}
 
 		/**
 		 * Print a warning line including a warning emoji.
 		 *
-		 * @param string  $message Message to print
-		 * @param integer $indent  Indenting Level, default = 1
+		 * @param string    $message Message to print
+		 * @param int       $indent  Indenting Level, default = 1
 		 */
-		protected function printWarningLine($message, $indent = 1) {
+		protected function printWarningLine(string $message, int $indent = 1) {
 			$this->println($this->c($message)->yellow, $indent);
 		}
 
@@ -83,29 +83,29 @@
 		 * Print a detail line.
 		 * This is used to print out detail information for humans.
 		 *
-		 * @param string  $message Message to print
-		 * @param integer $indent  Indenting Level, default = 1
+		 * @param string    $message Message to print
+		 * @param int       $indent  Indenting Level, default = 1
 		 */
-		protected function printDetailLine($message, $indent = 1) {
+		protected function printDetailLine(string $message, int $indent = 1) {
 			$this->println($this->c($message)->dark, $indent);
 		}
 
 		/**
 		 * Print a success line including a reload/update emoji.
 		 *
-		 * @param string  $message Message to print
-		 * @param integer $indent  Indenting Level, default = 1
+		 * @param string    $message Message to print
+		 * @param int       $indent  Indenting Level, default = 1
 		 */
-		protected function printUpdateLine($message, $indent = 1) {
+		protected function printUpdateLine(string $message, int $indent = 1) {
 			$this->println($this->c('🔄  ' . $message)->blue, $indent);
 		}
 
 		/**
 		 * Print a heading.
 		 *
-		 * @param string $message Message to pront
+		 * @param string $message Message to print
 		 */
-		protected function printHeadingLine($message) {
+		protected function printHeadingLine(string $message) {
 			$this->println($this->c('=== ' . $message)->bold->green);
 		}
 
@@ -114,7 +114,7 @@
 		 *
 		 * @param string $message Message to print
 		 */
-		protected function printSubHeadingLine($message) {
+		protected function printSubHeadingLine(string $message) {
 			$this->println($this->c('--- ' . $message)->cyan);
 		}
 
@@ -125,17 +125,17 @@
 		 *
 		 * Example:
 		 * 
-		 *     while (doSomethingHeav()) {
+		 *     while (doSomethingHeavy()) {
 		 *         printSpinner()
 		 *     }
 		 *
 		 * printSpinner(false)
 		 *
-		 * @param  bool|boolean $reset  Pass true to hide id, false to show/update it
+		 * @param  bool         $reset  Pass true to hide id, false to show/update it
 		 * @param  string|null  $label  Label to show beside the spinner icon
-		 * @param  int|integer  $indent Indenting Level, default = 1
+		 * @param  int          $indent Indenting Level, default = 1
 		 */
-		protected function printSpinner(bool $reset = false, string $label = null, int $indent = 1) {
+		protected function printSpinner(bool $reset = false, ?string $label = null, int $indent = 1) {
 			static $spinner = '⠏⠇⠧⠦⠴⠼⠸⠹⠙⠋';
 			static $iteration = 0;
 
@@ -153,13 +153,13 @@
 		 * Show a progress bar.
 		 * Takes terminal width into account.
 		 *
-		 * @param  int         $done       Progress as an int, pass 0 to reset it
-		 * @param  int|integer $total      Maximum progress possible
-		 * @param  string|null $doneLabel  Label to show for how many items/whatever are done, i.e. %d MB
-		 * @param  string|null $totalLabel Label to show for how many items/whatever can be done, i.e. %d GB
-		 * @param  int|integer $indent     Indenting Level, default = 1
+		 * @param  int          $done       Progress as an int, pass 0 to reset it
+		 * @param  int          $total      Maximum progress possible
+		 * @param  string|null  $doneLabel  Label to show for how many items/whatever are done, i.e. %d MB
+		 * @param  string|null  $totalLabel Label to show for how many items/whatever can be done, i.e. %d GB
+		 * @param  int          $indent     Indenting Level, default = 1
 		 */
-		protected function printProgressBar(int $done, int $total = 100, string $doneLabel = null, string $totalLabel = null, int $indent = 1) {
+		protected function printProgressBar(int $done, int $total = 100, ?string $doneLabel = null, ?string $totalLabel = null, int $indent = 1) {
 			static $startTime;
 
 			// if we go over our bound, just ignore it
@@ -198,7 +198,7 @@
 
 			// Build the status bar itself
 			$barSize = $this->getColumns()   // terminal width
-			         - mb_strlen($prependix) // prependix label length
+			         - mb_strlen($prependix) // prepend label length
 			         - mb_strlen($appendix)  // appendix label length
 			         - mb_strlen($rateLabel) // rate label length
 			         - 3;                    // spaces between the labels
@@ -231,8 +231,8 @@
 		/**
 		 * Print a divider.
 		 *
-		 * @param bool|boolean $pad  Whether or not to print empty lines before and after the divider
-		 * @param string       $char Char to be used, defaults to '-' (also if passed string is empty)
+		 * @param bool      $pad  Whether to print empty lines before and after the divider
+		 * @param string    $char Char to be used, defaults to '-' (also if passed string is empty)
 		 */
 		protected function printDivider(bool $pad = false, string $char = '-') {
 			if ($pad) $this->println();
@@ -249,12 +249,12 @@
 		/**
 		 * Print a list item.
 		 *
-		 * @param string      $message Message to print
-		 * @param int|integer $indent  Indenting Level, default = 1
-		 * @param string      $color   Color of the message, default = 'dark' | Uses the colors of kevinlebrun\Colors
-		 * @param string      $char    Char to be used as the list character. If empty, '·' is used.
+		 * @param string $message Message to print
+		 * @param int    $indent  Indenting Level, default = 1
+		 * @param string $color   Color of the message, default = 'dark' | Uses the colors of kevinlebrun\Colors
+		 * @param string $char    Char to be used as the list character. If empty, '·' is used.
 		 */
-		protected function printListItem($message, int $indent = 1, string $color = 'dark', string $char = '·') {
+		protected function printListItem(string $message, int $indent = 1, string $color = 'dark', string $char = '·') {
 			if (empty($char)) {
 				$char = '·';
 			}
@@ -262,7 +262,7 @@
 			$this->println($this->c(str_repeat(' ', $indent * 4 - 2) . $char . ' ' . $message)->$color, 0);
 		}
 		
-		protected function printTimeoutMessage($message, int $indent = 1, int $timeout = 3, string $key = 'c') {
+		protected function printTimeoutMessage($message, int $indent = 1, int $timeout = 3, string $key = 'c'): bool {
 			if (php_sapi_name() == 'cli') {
 				$this->println($this->c('🕯️  ' . $message)->magenta, $indent);
 				$this->println($this->c('   Continuing in ' . $timeout . ' seconds. Press "' . $key . '" to cancel.')->dark);
@@ -311,10 +311,10 @@
 		/**
 		 * Print something.
 		 *
-		 * @param string  $message Message to print
-		 * @param integer $indent  Indenting Level, default = 0
+		 * @param string    $message Message to print
+		 * @param int       $indent  Indenting Level, default = 0
 		 */
-		protected function print($message = '', $indent = 0) {
+		protected function print(string $message = '', int $indent = 0) {
 			if (php_sapi_name() != 'cli') return;
 
 			echo str_repeat(' ', $indent * 4) . $message;

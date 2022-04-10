@@ -12,15 +12,15 @@
 	 * @package as.adepto.sweet-cli.base
 	 */
 	abstract class CLIFunctions {
-		private static $verbosityLevel = 0;
-		private static $verbosityLevelBackup = 0;
+		private static int $verbosityLevel = 0;
+		private static int $verbosityLevelBackup = 0;
 
 		/**
 		 * Set the verbosity level required for any output
 		 *
 		 * @param int $level
 		 */
-		public static function setVerbosityLevel(int $level) {
+		public static function setVerbosityLevel(int $level): void {
 			if (!is_numeric($level)) {
 				self::$verbosityLevel = 0;
 				self::$verbosityLevelBackup = 0;
@@ -33,14 +33,14 @@
 		/**
 		 * Disable all verbosity.
 		 */
-		public static function disableVerbosity() {
+		public static function disableVerbosity(): void {
 			self::$verbosityLevel = 0;
 		}
 
 		/**
 		 * Re-enable last verbosity level.
 		 */
-		public static function enableVerbosity() {
+		public static function enableVerbosity(): void {
 			self::$verbosityLevel = self::$verbosityLevelBackup;
 		}
 
@@ -58,10 +58,10 @@
 		 *
 		 * @param int     $level       Verbosity Level
 		 * @param string  $message     Message
-		 * @param boolean $wrap        Whether or not to wrap the message at maximum screen width
-		 * @param boolean $printPrefix Whether or not to print the verbosity prefix, i.e. "-vv" for $level 2
+		 * @param boolean $wrap        Whether to wrap the message at maximum screen width
+		 * @param boolean $printPrefix Whether to print the verbosity prefix, i.e. "-vv" for $level 2
 		 */
-		public static function verboseOnLevel(int $level, $message, $wrap = false, bool $printPrefix = true) {
+		public static function verboseOnLevel(int $level, string $message, bool $wrap = false, bool $printPrefix = true) {
 			$c = new Color();
 
 			if (self::getVerbosityLevel() >= $level) {
@@ -73,7 +73,6 @@
 				// Whitespace between the prefix and the actual message
 				// MAX_LEVEL + OVERHEAD - STRLEN(PREFIX) + 1 (SPACE)
 				$prefixWhitespace = str_repeat(' ', $maxLevel + 2 - strlen($prefix) + 1);
-				$prefixAsWhitespace = str_repeat(' ', strlen($prefix . $prefixWhitespace) - 1);
 				$prefixWithOverheadAsWhitespace = str_repeat(' ', strlen($prefix . $prefixWhitespace));
 
 				// Clean Linebreaks
@@ -103,18 +102,18 @@
 		 * Warning: Since this uses PHP_OS it might return the OS
 		 * this installation of PHP was compiled on.
 		 *
-		 * @return boolean
+		 * @return bool
 		 */
-		public static function isDarwin() {
+		public static function isDarwin(): bool {
 			return strtolower(PHP_OS) == 'darwin';
 		}
 
 		/**
 		 * Alias for {@see isDarwin()}.
 		 *
-		 * @return boolean
+		 * @return bool
 		 */
-		public static function isOSX() {
+		public static function isOSX(): bool {
 			return self::isDarwin();
 		}
 
@@ -123,9 +122,9 @@
 		 * Warning: Since this uses PHP_OS it might return the OS
 		 * this installation of PHP was compiled on.
 		 *
-		 * @return [description]
+		 * @return bool
 		 */
-		public static function isWindows() {
+		public static function isWindows(): bool {
 			return substr(strtolower(PHP_OS), 0, 3) == 'WIN';
 		}
 	}
