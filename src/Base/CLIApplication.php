@@ -73,6 +73,10 @@
 				echo implode("\n", array_map([$this, 'highlightTraceLine'], explode("\n", $t->getTraceAsString()))) . PHP_EOL;
 			}
 		}
+		
+		public function __handleSubCommandException(string $subCommand, Throwable $t): void {
+			echo $this->c($subCommand . ': ' . $t->getMessage())->red . PHP_EOL;
+		}
 
 		protected function highlightTraceLine(string $line): string {
 			return preg_replace_callback('~^(#[0-9]+) ({main}|([\S ]+)\(([0-9]+)\): ([\S\s]+))~', function($m) {
@@ -411,8 +415,8 @@
 					$subCmdObj->run();
 
 					exit(0);
-				} catch (\Exception $e) {
-					echo $this->c($subCommand . ': ' . $e->getMessage())->red . PHP_EOL;
+				} catch (Exception $e) {
+					$this->__handleSubCommandException($subCommand, $e);
 					exit(1);
 				}
 			}
