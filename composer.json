@@ -4,7 +4,7 @@
 	"description": "Framework for making easy CLI applications",
 	"license": "proprietary",
 	"require": {
-		"php": ">=7.0.0",
+		"php": ">=7.4",
 		"corneltek/getoptionkit": "^2.6.1",
 		"kevinlebrun/colors.php": "^1.0.3",
 		"ext-mbstring": "*"
