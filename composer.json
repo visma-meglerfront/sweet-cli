@@ -12,6 +12,9 @@
 	"require-dev": {
 		"squizlabs/php_codesniffer": "^2.5"
 	},
+	"suggest": {
+		"ext-json": "To print more verbose information with -vv"
+	},
 	"autoload": {
 		"psr-4": {
 			"Adepto\\SweetCLI\\": "src"

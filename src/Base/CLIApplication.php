@@ -365,13 +365,23 @@
 				// Options
 				if (count($optionsArray)) {
 					CLIFunctions::verboseOnLevel(2, 'Options:');
-					CLIFunctions::verboseOnLevel(2, json_encode($optionsArray, JSON_PRETTY_PRINT), SubCommandOptionPrinter::$screenWidth, false);
+					
+					if (extension_loaded('json')) {
+						CLIFunctions::verboseOnLevel(2, json_encode($optionsArray, JSON_PRETTY_PRINT), SubCommandOptionPrinter::$screenWidth, false);
+					} else {
+						CLIFunctions::verboseOnLevel(2, 'Install php-json to view detailed information.');
+					}
 				}
 
 				// arguments
 				if (count($arguments)) {
 					CLIFunctions::verboseOnLevel(2, 'Arguments:');
-					CLIFunctions::verboseOnLevel(2, json_encode($arguments, JSON_PRETTY_PRINT), SubCommandOptionPrinter::$screenWidth, false);
+					
+					if (extension_loaded('json')) {
+						CLIFunctions::verboseOnLevel(2, json_encode($arguments, JSON_PRETTY_PRINT), SubCommandOptionPrinter::$screenWidth, false);
+					} else {
+						CLIFunctions::verboseOnLevel(2, 'Install php-json to view detailed information.');
+					}
 				}
 
 				/*
