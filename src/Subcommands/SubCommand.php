@@ -7,7 +7,6 @@
 	use GetOptionKit\OptionCollection;
 
 	use Adepto\SweetCLI\Base\{
-		Config,
 		ColoredLogger,
 		CLIApplication
 	};
@@ -160,15 +159,15 @@
 			return true;
 		}
 
-		public static function printHelp(\GetOptionKit\OptionPrinter\OptionPrinter $printer) {
+		public static function printHelp(array $config, OptionPrinter $printer) {
 			$c = new Color();
 			$specs = self::getOptionKitSpecs();
 
 			if (!empty(static::COMMAND)) {
-				echo $c(Config::get('_cli.title.short', 'Unnammed Application') . ': ')->cyan;
+				echo $c($config['title_short'] . ': ')->cyan;
 				echo $c(static::COMMAND)->green->underline . PHP_EOL;
 			} else {
-				echo $c(Config::get('_cli.title.long', 'Unnamed Application'))->cyan . PHP_EOL;
+				echo $c($config['title_long'])->cyan . PHP_EOL;
 			}
 
 			if (static::getDescription()) {

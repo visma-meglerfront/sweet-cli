@@ -10,12 +10,6 @@
 	// Colors
 	use Colors\Color;
 
-	// SweetCLI
-	use Adepto\SweetCLI\Base\{
-		Config,
-		CLIFunctions
-	};
-
 	use Adepto\SweetCLI\Subcommands\SubCommandOptionPrinter;
 	use Adepto\SweetCLI\Exceptions\ConflictException;
 	
@@ -393,7 +387,11 @@
 					(You have to set your priorities, yo.)
 				 */
 				if (isset($options['help']) || (!$class::allowsEmptyOptions() && count($optionsArray) == 0)) {
-					$class::printHelp(new SubCommandOptionPrinter());
+					$class::printHelp([
+						'title_short'       =>  static::getShortTitle(),
+						'title_long'        =>  static::getTitle()
+					], new SubCommandOptionPrinter());
+					
 					exit(0);
 				}
 
@@ -417,14 +415,6 @@
 				}
 			}
 		}
-
-		/**
-		 * Get the path the config file should be saved as.
-		 * The type of the file is detected automatically, if it is .json or .yml
-		 *
-		 * @return string Filepath ending in either .json or .yml
-		 */
-		public abstract static function getConfigPath(): string;
 
 		public static function PATH() {
 			return realpath(__DIR__ . '/../../');
