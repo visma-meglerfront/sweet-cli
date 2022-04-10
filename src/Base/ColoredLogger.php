@@ -141,7 +141,7 @@
 
 			if ($reset) {
 				$iteration = 0;
-				echo "\r" . str_repeat(' ', mb_strlen($label) + $indent * 4 + 1 + 1) . "\r";
+				echo "\r" . str_repeat(' ', mb_strlen($label ?? '') + $indent * 4 + 1 + 1) . "\r";
 
 				return;
 			}
