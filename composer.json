@@ -10,7 +10,7 @@
 		"ext-mbstring": "*"
 	},
 	"require-dev": {
-		"squizlabs/php_codesniffer": "^2.5"
+		"squizlabs/php_codesniffer": "^2.5 || ^3.0"
 	},
 	"suggest": {
 		"ext-json": "To print more verbose information with -vv"
