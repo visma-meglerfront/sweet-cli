@@ -137,7 +137,7 @@
 		 * @param string|null $path  Actual binary path, i.e. `/usr/local/bin/composer` or `composer` (if you want to rely on the user's PATH)
 		 *                           Leave null to map directly to the user's PATH.
 		 */
-		public function addAlias(string $alias, string $path = null) {
+		public function addAlias(string $alias, ?string $path = null) {
 			$this->aliases[$alias] = $path ?? $alias;
 		}
 
