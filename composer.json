@@ -1,5 +1,5 @@
 {
-	"name": "adeptoas/sweet-cli",
+	"name": "bluefirex/sweet-cli",
 	"type": "library",
 	"description": "Framework for making easy CLI applications",
 	"license": "proprietary",
@@ -23,7 +23,7 @@
 	"authors": [
 		{
 			"name": "Benjamin Schmidt",
-			"email": "benjamin.schmidt@visma.com",
+			"email": "github@bfx.re",
 			"homepage": "https://bluefirex.de"
 		}
 	],
